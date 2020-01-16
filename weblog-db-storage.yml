@@ -13,15 +13,14 @@ spec:
   accessModes:
   - ReadWriteMany
   hostPath:
-    path: "/data/storage"
+    path: "/Users/neba/Workspace/Learning/Udemy/DocKube/Section8/data/storage"
     type: Directory
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: storage-volume
-  namespace: default
+  name: storage-claim
   labels:
     app: weblog
     type: storage
@@ -32,3 +31,28 @@ spec:
   resources:
     requests:
       storage: 1Gi
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb
+  namespace: default
+  labels:
+    app: weblog
+    type: database
+spec:
+  containers:
+  - name: mongodb
+    image: weblog-db:v1.0.0
+    imagePullPolicy: Never
+    command:
+    - "mongod"
+    - "--bind_ip_all"
+    volumeMounts:
+    - mountPath: "/data/db"
+      name: storage
+  volumes:
+  - name: storage
+    persistentVolumeClaim:
+      claimName: storage-claim

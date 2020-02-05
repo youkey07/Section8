@@ -13,7 +13,7 @@ spec:
   accessModes:
   - ReadWriteMany
   hostPath:
-    path: "/Users/neba/Workspace/Learning/Udemy/DocKube/Section8/data/pv0000"
+    path: "/Users/neba/Workspace/Learning/Udemy/DocKube/Section8/db/data/pv0000"
     type: Directory
 
 ---
@@ -32,7 +32,7 @@ spec:
   accessModes:
   - ReadWriteMany
   hostPath:
-    path: "/Users/neba/Workspace/Learning/Udemy/DocKube/Section8/data/pv0001"
+    path: "/Users/neba/Workspace/Learning/Udemy/DocKube/Section8/db/data/pv0001"
     type: Directory
 
 ---
@@ -51,7 +51,7 @@ spec:
   accessModes:
   - ReadWriteMany
   hostPath:
-    path: "/Users/neba/Workspace/Learning/Udemy/DocKube/Section8/data/pv0002"
+    path: "/Users/neba/Workspace/Learning/Udemy/DocKube/Section8/db/data/pv0002"
     type: Directory
 
 ---

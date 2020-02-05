@@ -1,6 +1,7 @@
 **/.git
 **/.DS_Store
 **/node_modules
+*.log
 
-study/
 data/
+study/

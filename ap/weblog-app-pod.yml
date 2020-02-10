@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongo-secret
+  namespace: default
+  labels:
+    app: weblog
+    type: database
+type: Opaque
+data:
+  root_username: YWRtaW4=
+  root_password: UGFzc3cwcmQ=
+  weblog_username: dXNlcg==
+  weblog_password: d2VsY29tZQ==
+  keyfile: aWsvdU8zdWh4aENBVE9NVkZuOGdQVzZWbVYzRHZYSTZBRmw5UzREYmFINng3K0ttWE5mc3U1YVBuM1BOOWVOeFF6bFIxUzRKR21vYVFvcTdZT2Q3QlZvR3BKMWJqcFd6VTFlMi8yN0JWMHZzZ3RZQTNFVGxuZnBUTmROV3cvampoU0V0RmljelA3Y3BtQStDWUpkb1l4VU5BWG1HNnhnam01bFBwQXVydkY2cERDUWNXd3FrQ3pTQzMxVXFXL29vVTh6YjRzZW5EL3g2cTZ0dGs3eXBNNkNRTXU1dXAvVFdoRmlIM2FUZ0puQTE3MVhZbkhjbThQUlY4V0M3YkY4SDRWMkwrM1BmeE5TOFNaQUZMNm5raWlOc3pGM0QvV0hheTkxaVVrdlZDZyt3c2o4aEllSnlCazVLSGNFRmtjL0wwa3dPUUt5dzc3dGFuTjFDNW10VFo0YS9maXdOUFQ4VFg2ZWJDOS9XR1kzSnBjU3IrWU9XS0I3RjBrSlZ2S2RKM0MyN0NSZkJlTXc0TUtzdC92RVJrcWRDcU81eEg0dzZLRzQ5ZGdOTmFjdGN6Ym9DN2hqUk5wNzBwMVJaTUowZW45aXh1d3pYN2dsNmhJNE5FcE9BTUpJbUZoRmEybVFOcVpkN0ZNMnFmYm43NS9TOEZWZ3I1cGF6UXlySmdCS3lqd01rNlFTcnpWek4vQzJLTnlaZ2R4UFhCVDNJb1pEbkNiT1MrTEQyenQzNXVHTmJnVUcybjI3Mjc5YzdXRzlXS3VOcmRqaWRvUW9kV0NCNVdtdjZoLytRN2tXZzQ3bC9haVk1SlViRUdrZTRmYXhmU0JXUFRtem9YRnJrSUo2UWpxbTY1c2FDYktYUHhBcFFpNk1tdEhka0UwVEV4aWt6TGZhUVdaUkEvbk5RMUc3ZXlKYVNMcGh6bGtDOUtPL0d0bktESmVkdmFDcHdFc0FMTFU2Vjd3NVNtVnlrOStxZXhjbkZmdnJCdmNXTG1ERlF3V1c2bTZYdDkzZDd6Q015cWJlOG5hMmM5WXF1SDVPOGlCMHFGOXB0cjFqcnRVK0JKQ1NManZGY1AwN2ppZzh0MUtMcExaV2RyUW1VQmNxRTQrSVNDWGhpYnVXMmF3Z3d3UUZ5ajFzRnYveFdNLytyZW5aU1JSekhXV3NzSjk3V1Vkbi9Tbm83c1ZuY2g1cEE1Ym5iL0lqN09lTzFIdTlJUXhMcUNtYW9mVVRBWUtLQ3lGUjRRMEtKMzdIOFByVGZ3OWFtMnBId2RXbHhHQVJlY3FTTTZHWGIvWUV2S0RHbHd4KzFqNmRPNktpUkVRZ3l3ZnBjM241Sy9leDZEa1hsL0ZFaEJEVjVyZVY1dWtxNQo=
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nodeapp
+  namespace: default
+  labels:
+    app: weblog
+    type: application
+spec:
+  containers:
+  - name: node
+    image: weblog-app:v1.0.0
+    imagePullPolicy: Never
+    ports:
+    - containerPort: 3000
+    env:
+    - name: "MONGODB_USERNAME"
+      valueFrom:
+        secretKeyRef:
+          name: mongo-secret
+          key: weblog_username
+    - name: "MONGODB_PASSWORD"
+      valueFrom:
+        secretKeyRef:
+          name: mongo-secret
+          key: weblog_password
+    - name: "MONGODB_HOSTS"
+      value: "mongo-0.db-svc:27017,mongo-1.db-svc:27017,mongo-2.db-svc:27017"
+    - name: "MONGODB_DATABASE"
+      value: "weblog"
+    - name: "MONGODB_REPLICASET"
+      value: "rs0"
